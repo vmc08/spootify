@@ -1,4 +1,4 @@
-@import '../../../styles/vars';
+@import "styles/vars";
 
 .header {
   height: 300px;
@@ -54,7 +54,8 @@
       margin-right: auto;
     }
 
-    h1, h2 {
+    h1,
+    h2 {
       font-weight: 500;
       text-shadow: $box-shadow;
       text-align: right;
@@ -101,7 +102,7 @@
         margin-right: 10px;
 
         &:first-of-type {
-          color: #FFD60B;
+          color: #ffd60b;
         }
       }
 
