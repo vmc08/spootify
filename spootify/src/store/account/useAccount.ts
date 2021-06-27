@@ -5,8 +5,8 @@ import { setAccount } from "./accountSlice";
 
 const useAccount = () => {
   const dispatch = useDispatch();
-  const accountState = useSelector((state: IReduxState) => state.account);
-  const setAccountAction = (data: IReduxState["account"]) =>
+  const accountState = useSelector((state: IReduxState) => state.account.value);
+  const setAccountAction = (data: IReduxState["account"]["value"]) =>
     dispatch(setAccount(data));
 
   return {

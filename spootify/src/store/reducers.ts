@@ -11,7 +11,7 @@ import accountReducer, {
 import { loadState } from "utils/localStorage";
 
 export interface IReduxState {
-  account: IAccount;
+  account: { value?: IAccount };
   tokens: { value?: ITokens };
 }
 

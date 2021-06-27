@@ -44,10 +44,8 @@ const Login = () => {
           )}`,
         },
       });
-      if (result.data) {
-        setTokensAction(result.data);
-        history.push("/");
-      }
+      setTokensAction(result.data);
+      history.push("/");
     } catch (e) {
       console.log(e);
       setLoading(false);
