@@ -1,4 +1,4 @@
-@import '../../../styles/vars';
+@import "../../../styles/vars";
 
 .sidebar {
   min-width: 225px;
@@ -81,6 +81,12 @@
     font-weight: 300;
     margin-bottom: 50px;
     margin-top: 20px;
+
+    &__avatar {
+      border-radius: 50%;
+      width: 67.5px;
+      height: 67.5px;
+    }
 
     @media only screen and (max-width: 650px) {
       > p {

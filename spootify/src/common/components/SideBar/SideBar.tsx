@@ -8,8 +8,9 @@ import {
   faStream,
 } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { ReactComponent as Avatar } from "assets/images/avatar.svg";
+// import { ReactComponent as Avatar } from "assets/images/avatar.svg";
 import "./_sidebar.scss";
+import useAccount from "store/account/useAccount";
 
 function renderSideBarOption(
   link: string,
@@ -30,11 +31,20 @@ function renderSideBarOption(
 }
 
 export default function SideBar() {
+  const { accountState } = useAccount();
+  const avatar = accountState?.images[0].url;
   return (
     <div className="sidebar">
       <div className="sidebar__profile">
-        <Avatar />
-        <p>Bob Smith</p>
+        {avatar && (
+          <img
+            className="sidebar__profile__avatar"
+            src={avatar}
+            alt={accountState?.display_name}
+            draggable={false}
+          />
+        )}
+        <p>{accountState?.display_name}</p>
       </div>
       <div className="sidebar__options">
         {renderSideBarOption("/", faHeadphonesAlt, "Discover", true)}
