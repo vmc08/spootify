@@ -3,16 +3,12 @@ import axios from "axios";
 import queryString from "query-string";
 
 import config from "config";
+import { ITokens } from "types/tokens";
+import useTokens from "store/tokens/useTokens";
 import "./_login.scss";
 
-export interface ITokenResult {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-}
-
 const Login = () => {
+  const { setTokensAction } = useTokens();
   const [loading, setLoading] = useState(false);
   const { code } = queryString.parse(window.location.search);
 
@@ -36,7 +32,7 @@ const Login = () => {
         redirect_uri: config.redirectUrl,
         code,
       });
-      const result = await axios.post<ITokenResult>(config.api.authUrl, body, {
+      const result = await axios.post<ITokens>(config.api.authUrl, body, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Accept: "application/json",
@@ -45,7 +41,9 @@ const Login = () => {
           )}`,
         },
       });
-      console.log(result.data);
+      if (result.data) {
+        setTokensAction(result.data);
+      }
       setLoading(false);
     } catch (e) {
       console.log(e);
