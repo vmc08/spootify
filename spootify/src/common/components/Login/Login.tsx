@@ -10,10 +10,6 @@ import "./_login.scss";
 
 const SPOTIFY_CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : process.env.REACT_APP_VERCEL_URL;
 
 const Login = () => {
   const history = useHistory();
@@ -27,7 +23,7 @@ const Login = () => {
       .stringify({
         response_type: "code",
         client_id: SPOTIFY_CLIENT_ID,
-        redirect_uri: REDIRECT_URI,
+        redirect_uri: window.location.origin,
         scopes: config.scopes.join(","),
       })
       .toString();
@@ -39,7 +35,7 @@ const Login = () => {
       setLoading(true);
       const body = queryString.stringify({
         grant_type: "authorization_code",
-        redirect_uri: REDIRECT_URI,
+        redirect_uri: window.location.origin,
         code,
       });
       const result = await axios.post<ITokens>(config.api.authUrl, body, {
