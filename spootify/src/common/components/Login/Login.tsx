@@ -13,7 +13,7 @@ const SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
 const REDIRECT_URI =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : process.env.VERCEL_URL;
+    : process.env.REACT_APP_VERCEL_URL;
 
 const Login = () => {
   const history = useHistory();
