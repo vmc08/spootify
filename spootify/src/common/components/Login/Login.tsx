@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 import config from "config";
@@ -8,8 +9,10 @@ import useTokens from "store/tokens/useTokens";
 import "./_login.scss";
 
 const Login = () => {
-  const { setTokensAction } = useTokens();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
+
+  const { setTokensAction } = useTokens();
   const { code } = queryString.parse(window.location.search);
 
   const spotifyLogin = () => {
@@ -43,8 +46,8 @@ const Login = () => {
       });
       if (result.data) {
         setTokensAction(result.data);
+        history.push("/");
       }
-      setLoading(false);
     } catch (e) {
       console.log(e);
       setLoading(false);
@@ -66,7 +69,7 @@ const Login = () => {
           onClick: spotifyLogin,
         })}
       >
-        {loading ? "Logging in..." : "Log in with Spotify"}
+        {loading ? "Loading..." : "Log in with Spotify"}
       </button>
     </div>
   );

@@ -12,7 +12,7 @@ import { loadState } from "utils/localStorage";
 
 export interface IReduxState {
   account: IAccount;
-  tokens: ITokens;
+  tokens: { value?: ITokens };
 }
 
 export const preloadedState = {

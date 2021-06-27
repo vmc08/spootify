@@ -1,15 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 
-import Routes from "routes";
-import CoreLayout from "common/layouts/CoreLayout";
+import App from "./App";
+import store from "store";
 import "styles/_main.scss";
 
 ReactDOM.render(
   <React.StrictMode>
-    <CoreLayout>
-      <Routes />
-    </CoreLayout>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
