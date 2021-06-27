@@ -1,0 +1,21 @@
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  .login__button {
+    cursor: pointer;
+    font-size: inherit;
+    font-weight: 500;
+    color: white;
+    background-color: #000;
+    border: 0;
+    border-radius: 500px;
+    padding: 18px 48px;
+
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
