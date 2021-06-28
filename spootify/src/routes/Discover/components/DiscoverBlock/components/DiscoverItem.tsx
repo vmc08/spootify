@@ -1,12 +1,9 @@
 import { FC } from "react";
+
+import { TResponse } from "types/spotify";
 import "../styles/_discover-item.scss";
 
-interface IDiscoverItemProps {
-  name: string;
-  images: Array<{ url: string }>;
-}
-
-const DiscoverItem: FC<IDiscoverItemProps> = ({ images, name }) => {
+const DiscoverItem: FC<TResponse["data"][number]> = ({ images, name }) => {
   return (
     <div className="discover-item animate__animated animate__fadeIn">
       <div
