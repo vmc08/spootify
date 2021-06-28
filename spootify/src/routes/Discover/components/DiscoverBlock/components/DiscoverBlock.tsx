@@ -4,14 +4,15 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+
+import { TResponse } from "types/spotify";
 import DiscoverItem from "./DiscoverItem";
 import "../styles/_discover-block.scss";
 
 interface IDiscoverBlockProps {
   id: string;
   text: string;
-  data: never[];
-  imagesKey?: string;
+  response?: TResponse;
 }
 
 function scrollContainer(id: string, isNegative = false) {
@@ -26,12 +27,8 @@ function scrollContainer(id: string, isNegative = false) {
   };
 }
 
-const DiscoverBlock: FC<IDiscoverBlockProps> = ({
-  text,
-  id,
-  data,
-  imagesKey = "images",
-}) => {
+const DiscoverBlock: FC<IDiscoverBlockProps> = ({ text, id, response }) => {
+  const data = response?.data || [];
   return (
     <div className="discover-block">
       <div className="discover-block__header">
@@ -51,7 +48,7 @@ const DiscoverBlock: FC<IDiscoverBlockProps> = ({
         ) : null}
       </div>
       <div className="discover-block__row" id={id}>
-        {data.map(({ [imagesKey]: images, name }) => (
+        {data.map(({ images, name }) => (
           <DiscoverItem key={name} images={images} name={name} />
         ))}
       </div>
