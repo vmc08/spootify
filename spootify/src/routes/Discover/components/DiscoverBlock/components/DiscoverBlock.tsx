@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -8,26 +8,37 @@ import {
 import { TResponse } from "types/spotify";
 import DiscoverItem from "./DiscoverItem";
 import "../styles/_discover-block.scss";
+import { TQueryParams } from "hooks/useSpotify";
 
 interface IDiscoverBlockProps {
   id: string;
   text: string;
   response?: TResponse;
+  fetchMore: (params: TQueryParams) => Promise<TResponse>;
+  pageNum: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function scrollContainer(id: string, isNegative = false) {
-  return () => {
-    const scrollableContainer = document.getElementById(id);
-    if (!scrollableContainer) return;
+const DiscoverBlock: FC<IDiscoverBlockProps> = ({
+  text,
+  id,
+  response,
+  fetchMore,
+  pageNum,
+  setPage,
+}) => {
+  const scrollableContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollContainer = (isNegative = false) => {
+    if (!scrollableContainerRef.current) return;
     const amount = isNegative
-      ? -scrollableContainer.offsetWidth
-      : scrollableContainer.offsetWidth;
+      ? -scrollableContainerRef.current.offsetWidth
+      : scrollableContainerRef.current.offsetWidth;
 
-    scrollableContainer.scrollLeft = scrollableContainer.scrollLeft + amount;
+    scrollableContainerRef.current.scrollLeft =
+      scrollableContainerRef.current.scrollLeft + amount;
   };
-}
 
-const DiscoverBlock: FC<IDiscoverBlockProps> = ({ text, id, response }) => {
   const data = response?.data || [];
   return (
     <div className="discover-block">
@@ -38,18 +49,31 @@ const DiscoverBlock: FC<IDiscoverBlockProps> = ({ text, id, response }) => {
           <div className="animate__animated animate__fadeIn">
             <FontAwesomeIcon
               icon={faChevronLeft}
-              onClick={scrollContainer(id, true)}
+              onClick={() => scrollContainer(true)}
             />
             <FontAwesomeIcon
               icon={faChevronRight}
-              onClick={scrollContainer(id)}
+              onClick={async () => {
+                scrollContainer();
+                if (scrollableContainerRef.current) {
+                  const { scrollLeft, scrollWidth, clientWidth } =
+                    scrollableContainerRef.current;
+                  if (
+                    scrollLeft === scrollWidth - clientWidth &&
+                    response?.next
+                  ) {
+                    fetchMore({ page: pageNum + 1, callback: scrollContainer });
+                    setPage(pageNum + 1);
+                  }
+                }
+              }}
             />
           </div>
         ) : null}
       </div>
-      <div className="discover-block__row" id={id}>
-        {data.map(({ images, name }) => (
-          <DiscoverItem key={name} images={images} name={name} />
+      <div className="discover-block__row" id={id} ref={scrollableContainerRef}>
+        {data.map(({ images, name }, idx) => (
+          <DiscoverItem key={`${name}-${idx}`} images={images} name={name} />
         ))}
       </div>
     </div>

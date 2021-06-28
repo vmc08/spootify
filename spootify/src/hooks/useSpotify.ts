@@ -7,12 +7,24 @@ import {
 import useSpotifyStore from "store/spotify/useSpotifyStore";
 import useAxios from "./useAxios";
 
+export type TQueryParams = {
+  page?: number;
+  callback?: () => void;
+};
+
+const LIMIT = 20;
+
 const useSpotify = () => {
   const axios = useAxios();
   const { setResponseAction } = useSpotifyStore();
 
-  const getNewReleases = async (): Promise<TResponse> => {
-    const result = await axios.get<INewReleases>("/browse/new-releases");
+  const getNewReleases = async ({
+    page = 0,
+    callback,
+  }: TQueryParams): Promise<TResponse> => {
+    const result = await axios.get<INewReleases>(
+      `/browse/new-releases?limit=${LIMIT}&offset=${page * LIMIT}`
+    );
     const formattedResult = {
       data: result.data.albums.items.map((i) => ({
         name: i.name,
@@ -22,12 +34,16 @@ const useSpotify = () => {
       previous: result.data.albums.previous,
     };
     setResponseAction({ data: formattedResult, key: "newReleases" });
+    callback?.();
     return formattedResult;
   };
 
-  const getFeaturedPlaylists = async (): Promise<TResponse> => {
+  const getFeaturedPlaylists = async ({
+    page = 0,
+    callback,
+  }: TQueryParams): Promise<TResponse> => {
     const result = await axios.get<IFeaturedPlaylists>(
-      "/browse/featured-playlists"
+      `/browse/featured-playlists?limit=${LIMIT}&offset=${page * LIMIT}`
     );
     const formattedResult = {
       data: result.data.playlists.items.map((i) => ({
@@ -38,11 +54,17 @@ const useSpotify = () => {
       previous: result.data.playlists.previous,
     };
     setResponseAction({ data: formattedResult, key: "featuredPlaylists" });
+    callback?.();
     return formattedResult;
   };
 
-  const getCategories = async (): Promise<TResponse> => {
-    const result = await axios.get<ICategories>("/browse/categories");
+  const getCategories = async ({
+    page = 0,
+    callback,
+  }: TQueryParams): Promise<TResponse> => {
+    const result = await axios.get<ICategories>(
+      `/browse/categories?limit=${LIMIT}&offset=${page * LIMIT}`
+    );
     const formattedResult = {
       data: result.data.categories.items.map((i) => ({
         name: i.name,
@@ -52,6 +74,7 @@ const useSpotify = () => {
       previous: result.data.categories.previous,
     };
     setResponseAction({ data: formattedResult, key: "categories" });
+    callback?.();
     return formattedResult;
   };
 
